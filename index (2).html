@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f5f6fa;
+        }
+
+        /* Sidebar Styling */
+        nav {
+            width: 260px;
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 20px;
+            letter-spacing: 1px;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: #bdc3c7;
+            padding: 15px;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+
+        nav button:hover, nav button.active {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        /* Main Content Area */
+        main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        /* Dashboard Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1xl));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card.appointments { border-left-color: var(--success); }
+        .card.rooms { border-left-color: var(--danger); }
+
+        .card h3 {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--dark);
+            margin-top: 10px;
+        }
+
+        /* Forms & Tables */
+        .content-section {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button.btn-submit {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: var(--dark);
+        }
+
+        tr:hover {
+            background-color: #f1f2f6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav>
+        <h2>🏥 CarePlus HMS</h2>
+        <button class="nav-btn active" onclick="switchTab('dashboard')">Dashboard</button>
+        <button class="nav-btn" onclick="switchTab('patients')">Register Patient</button>
+        <button class="nav-btn" onclick="switchTab('appointments')">Appointments</button>
+        <button class="nav-btn" onclick="switchTab('billing')">Billing</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <header>
+            <h1 id="page-title">Dashboard</h1>
+            <div class="user-profile">Admin Dashboard</div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="content-section active">
+            <div class="stats-grid">
+                <div class="card">
+                    <h3>Total Patients</h3>
+                    <p>1,248</p>
+                </div>
+                <div class="card appointments">
+                    <h3>Today's Appointments</h3>
+                    <p>42</p>
+                </div>
+                <div class="card rooms">
+                    <h3>Available Beds</h3>
+                    <p>18 / 50</p>
+                </div>
+            </div>
+
+            <h2>Recent Admissions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient Name</th>
+                        <th>Age</th>
+                        <th>Doctor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#PT-9021</td>
+                        <td>John Doe</td>
+                        <td>45</td>
+                        <td>Dr. Smith (Cardio)</td>
+                        <td>Admitted</td>
+                    </tr>
+                    <tr>
+                        <td>#PT-9022</td>
+                        <td>Jane Smith</td>
+                        <td>29</td>
+                        <td>Dr. Adams (Pediatrics)</td>
+                        <td>Discharged</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Patient Registration Section -->
+        <div id="patients" class="content-section">
+            <h2>New Patient Registration</h2>
+            <form onsubmit="event.preventDefault(); alert('Patient Registered Successfully!');">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Enter patient's full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" placeholder="Enter age" required>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Medical History / Symptoms</label>
+                    <textarea rows="4" placeholder="Briefly detail past history or current symptoms..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Register Patient</button>
+            </form>
+        </div>
+
+        <!-- Appointments Section -->
+        <div id="appointments" class="content-section">
+            <h2>Schedule Appointment</h2>
+            <form onsubmit="event.preventDefault(); alert('Appointment Scheduled!');">
+                <div class="form-group">
+                    <label>Patient ID / Name</label>
+                    <input type="text" placeholder="Search patient..." required>
+                </div>
+                <div class="form-group">
+                    <label>Select Doctor</label>
+                    <select>
+                        <option>Dr. Smith (Cardiology)</option>
+                        <option>Dr. Adams (Pediatrics)</option>
+                        <option>Dr. Taylor (Neurology)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Appointment Date & Time</label>
+                    <input type="datetime-local" required>
+                </div>
+                <button type="submit" class="btn-submit">Book Appointment</button>
+            </form>
+        </div>
+
+        <!-- Billing Section -->
+        <div id="billing" class="content-section">
+            <h2>Invoicing & Billing</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Invoice ID</th>
+                        <th>Patient Name</th>
+                        <th>Consultation Fee</th>
+                        <th>Medicine Cost</th>
+                        <th>Total Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#INV-501</td>
+                        <td>John Doe</td>
+                        <td>$150.00</td>
+                        <td>$45.00</td>
+                        <td><strong>$195.00</strong></td>
+                        <td><button style="padding: 5px 10px; background-color: var(--secondary); color: white; border: none; border-radius:3px; cursor:pointer;">Print</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Navigation Script -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all content sections
